@@ -1,6 +1,7 @@
 
 var mainAccount , web3 , bal , tHash , maxWager;
 
+var abiArray = [ { "constant": false, "inputs": [ { "name": "_amount", "type": "uint256" } ], "name": "withdraw", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_hs", "type": "uint256" } ], "name": "HashSource", "type": "event" } ];
 var targetAddress = "0x300432bA68574DABB8872B7DE90CE84dde861b8c";
 var gas = 20*10**9
 
@@ -61,8 +62,25 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
   }
   */
 
-  // Get user's ethereum account
-  web3.eth.getAccounts(function(error,accounts){
+  web3.eth.getBalance(targetAddress, function(err, contractBalance) {
+    if(!err) {
+      console.log(contractBalance);
+    }
+  });
+  ///////////////////////////////////////////////////////////////////////
+    var MyContract = web3.eth.contract(abiArray);
+    var myContractInstance = MyContract.at('0x300432bA68574DABB8872B7DE90CE84dde861b8c');
+
+    // watch for an event with {some: 'args'}
+    var events = myContractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
+    events.watch(function(error, result){
+       console.log(result.transactionHash);
+    });
+
+  /////////////////////////////////////////////////////////////////
+
+   // Get user's ethereum account
+  web3.eth.getAccounts(function(error,accounts) {
     // show the floating baloon
     if (error || !accounts || accounts.length == 0) {
       document.getElementById("browser").style.visibility = "visible";
@@ -79,7 +97,7 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
       });
     }
   });
-
+  // Get contract balance
   web3.eth.getBalance(targetAddress, function(err, contractBalance) {
     if(!err) {
       var unformattedContractBalance = Math.round(contractBalance/10**9)/10**9;
@@ -124,32 +142,32 @@ function submitTransaction(_contractAddress , _value , _data) {
       })
     }
 
-    function updateScreen(receipt) {
-      var generatedHash = String(receipt.logs[0].data).toUpperCase();
-      processHash(generatedHash);
-      payout = receipt.logs[1].data / 10**18;
-      payoutText = "You have won "+payout.toFixed(2)+" Ether"
-      document.getElementById("payOut").textContent = payoutText;
-      document.getElementById("payOut").style.visibility = "visible";
-      transactionHTML = "<a href='https://rinkeby.etherscan.io/tx/"+tHash+"' target='_blank'>"+tHash+"</a>";
-      document.getElementById("transactionAddress").innerHTML = transactionHTML;
-      /*
-      alert(receipt.logs[1].data.toUpperCase()+'\n\nYou have won: '+
-      payout +
-      ' Ξther\n\nFrom ')
-      */
-      init();
-    }
-    function processHash(h) {
-      lh = h.substring(0,h.length-8);
-      rh = h.substring(h.length-8,h.length);
-      document.getElementById("leftHash").textContent = lh;
-      document.getElementById("rightHash").textContent = rh;
-      for (i=0;i<8;i++) {
-        document.getElementById("roll"+i).textContent = h.substring(58+i,59+i);
-      }
-    }
-    function clearRolls() {
+function updateScreen(receipt) {
+  var generatedHash = String(receipt.logs[0].data).toUpperCase();
+  processHash(generatedHash);
+  payout = receipt.logs[1].data / 10**18;
+  payoutText = "You have won "+payout.toFixed(2)+" Ether"
+  document.getElementById("payOut").textContent = payoutText;
+  document.getElementById("payOut").style.visibility = "visible";
+  transactionHTML = "<a href='https://rinkeby.etherscan.io/tx/"+tHash+"' target='_blank'>"+tHash+"</a>";
+  document.getElementById("transactionAddress").innerHTML = transactionHTML;
+  /*
+  alert(receipt.logs[1].data.toUpperCase()+'\n\nYou have won: '+
+  payout +
+  ' Ξther\n\nFrom ')
+  */
+  init();
+}
+function processHash(h) {
+  lh = h.substring(0,h.length-8);
+  rh = h.substring(h.length-8,h.length);
+  document.getElementById("leftHash").textContent = lh;
+  document.getElementById("rightHash").textContent = rh;
+  for (i=0;i<8;i++) {
+    document.getElementById("roll"+i).textContent = h.substring(58+i,59+i);
+  }
+}
+function clearRolls() {
       document.getElementById("rollTable").style.visibility = "visible";
       document.getElementById("rollTable").style.margin = "30px";
       for (i=0;i<8;i++) {
@@ -157,94 +175,94 @@ function submitTransaction(_contractAddress , _value , _data) {
       }
     }
 
-    //var hexArray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","Đ","Ξ","F"]
-    var numbtns = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    var bets = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    var total = 0;
-    var adjustedTotal = 0;
-    var messageString = "0x00000000000000000000000000000000";
+//var hexArray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","Đ","Ξ","F"]
+var numbtns = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var bets = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var total = 0;
+var adjustedTotal = 0;
+var messageString = "0x00000000000000000000000000000000";
 
-    function toggle(btn) {
-      if (numbtns[btn]==0) {
-        numbtns[btn] = 1;
-        document.getElementById("buttonCell"+btn).style.borderStyle = "inset";
-        document.getElementById("buttonCell"+btn).style.color = "red";
-        total++ ;
-      }
-      else {
-        numbtns[btn] = 0;
-        document.getElementById("buttonCell"+btn).style.borderStyle = "outset";
-        document.getElementById("buttonCell"+btn).style.color = "black";
-        total-- ;
-      }
-      updateString();
-      updateTotal();
+function toggle(btn) {
+  if (numbtns[btn]==0) {
+    numbtns[btn] = 1;
+    document.getElementById("buttonCell"+btn).style.borderStyle = "inset";
+    document.getElementById("buttonCell"+btn).style.color = "red";
+    total++ ;
+  }
+  else {
+    numbtns[btn] = 0;
+    document.getElementById("buttonCell"+btn).style.borderStyle = "outset";
+    document.getElementById("buttonCell"+btn).style.color = "black";
+    total-- ;
+  }
+  updateString();
+  updateTotal();
+}
+function clearButtons() {
+  for ( i=0; i<16 ; i++ ) {
+    if ( numbtns[i] ==1 ) {
+      toggle(i);
     }
-    function clearButtons() {
-      for ( i=0; i<16 ; i++ ) {
-        if ( numbtns[i] ==1 ) {
-          toggle(i);
-        }
-      }
-      updateString();
-      updateTotal();
-    }
-    function oddButtons() {
-      clearButtons();
-      toggle(1);
-      toggle(3);
-      toggle(5);
-      toggle(7);
-      toggle(9);
-      toggle(11);
-      toggle(13);
-      toggle(15);
-    }
-    function evenButtons() {
-      clearButtons();
-      toggle(2);
-      toggle(4);
-      toggle(6);
-      toggle(8);
-      toggle(10);
-      toggle(12);
-      toggle(14);
-      toggle(0);
-    }
-    function primeButtons() {
-      clearButtons();
-      toggle(2);
-      toggle(3);
-      toggle(5);
-      toggle(7);
-      toggle(11);
-      toggle(13);
-    }
+  }
+  updateString();
+  updateTotal();
+}
+function oddButtons() {
+  clearButtons();
+  toggle(1);
+  toggle(3);
+  toggle(5);
+  toggle(7);
+  toggle(9);
+  toggle(11);
+  toggle(13);
+  toggle(15);
+}
+function evenButtons() {
+  clearButtons();
+  toggle(2);
+  toggle(4);
+  toggle(6);
+  toggle(8);
+  toggle(10);
+  toggle(12);
+  toggle(14);
+  toggle(0);
+}
+function primeButtons() {
+  clearButtons();
+  toggle(2);
+  toggle(3);
+  toggle(5);
+  toggle(7);
+  toggle(11);
+  toggle(13);
+}
 
-    function updateString(){
-      messageString = "0x";
-      for (x=0;x<16;x++) {
-        messageString = messageString+"0"+numbtns[x];
-      }
-      //  document.getElementById("message").textContent = messageString;
-    }
+function updateString(){
+  messageString = "0x";
+  for (x=0;x<16;x++) {
+    messageString = messageString+"0"+numbtns[x];
+  }
+  //  document.getElementById("message").textContent = messageString;
+}
 
-    function updateTotal(){
-      if(bet.value>maxWager){
-        wagerOverflow()
-        bet.value = maxWager;
-        return;
-      }
-      adjustedTotal = Math.round(total*bet.value*1000)/1000;
-      document.getElementById('totalBets').textContent = adjustedTotal;
-    }
+function updateTotal(){
+  if(bet.value>maxWager){
+    wagerOverflow()
+    bet.value = maxWager;
+    return;
+  }
+  adjustedTotal = Math.round(total*bet.value*1000)/1000;
+  document.getElementById('totalBets').textContent = adjustedTotal;
+}
 
-    function wagerOverflow() {
-      var overFlowHTML = "Overflow"+
-      "<button style = 'bottom:20px; right:20px; position:absolute' onclick='hidePanel()'>OK</button>";
-      document.getElementById("panel").innerHTML = overFlowHTML;
-      document.getElementById("panel").style.backgroundColor = "pink";
-      document.getElementById("panel").style.width = "300px";
-      document.getElementById("panel").style.height = "200px";
-      showPanel();
-    }
+function wagerOverflow() {
+  var overFlowHTML = "Overflow"+
+  "<button style = 'bottom:20px; right:20px; position:absolute' onclick='hidePanel()'>OK</button>";
+  document.getElementById("panel").innerHTML = overFlowHTML;
+  document.getElementById("panel").style.backgroundColor = "pink";
+  document.getElementById("panel").style.width = "300px";
+  document.getElementById("panel").style.height = "200px";
+  showPanel();
+}
