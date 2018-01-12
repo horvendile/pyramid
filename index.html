@@ -1,7 +1,201 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <title>Pyramid</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Pyramid</title>
+    <meta name="ethereum-dapp-url-bar-style" content="transparent">
+
+    <link rel="shortcut icon" href="chain.png" type="image/vnd.microsoft.icon">
+    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet">
+    <link rel='stylesheet' href='pyramid.css' type='text/css'>
+
+    <script src="pyramid.js"></script>
+    <script src="web3.js"></script>
+    <script src="particles.js-master/dist/particles.min.js"></script>
+  </head>
+  <body>
+    <canvas class="background"></canvas>
+    <div class="flex-container" >
+      <table id="inner">
+        <tr> <!-- Header and Info Table-->
+          <td>
+            <div id="header" >
+              
+            </div>
+          </td>
+          <td>
+            <table id="infoTable">
+              <tr>
+                <td class="infoLabel">
+                  Player :
+                </td>
+                <td class="infoContent" >
+                  <span id="ma">
+                    Unable to connect to Main Account
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="infoLabel">
+                   Balance :
+                </td>
+                <td class="infoContent" >
+                  <span style = 'width: 20px' id="ba"></span> Ξther
+                </td>
+              </tr>
+              <tr id="filler">
+              </tr>
+              <tr>
+                <td class="infoLabel">
+                  Contract  :
+                </td>
+                <td class="infoContent" >
+                  <span id="ca"></span>
+                </td>
+              </tr>
+              <tr>
+                <td class="infoLabel">
+                   Balance :
+                </td>
+                <td class="infoContent" >
+                  <span id="cb"></span> Ξther
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr> <!-- Hash Source -->
+          <td colspan="2" id="hashSource">
+            <span id="leftHash"></span><span id="rightHash"></span>
+          </td>
+        </tr>
+        <tr> <!-- Buttons -->
+          <td><!-- Button Table -->
+            <div>
+              <table id="buttonTable" >
+                <tr class="buttonRow">
+                  <td class="buttonCell" onclick="toggle(0)" id="buttonCell0">0</td>
+                  <td class="buttonCell" onclick="toggle(1)" id="buttonCell1">1</td>
+                  <td class="buttonCell" onclick="toggle(2)" id="buttonCell2">2</td>
+                  <td class="buttonCell" onclick="toggle(3)" id="buttonCell3">3</td>
+                </tr>
+                <tr class="buttonRow">
+                  <td class="buttonCell" onclick="toggle(4)" id="buttonCell4">4</td>
+                  <td class="buttonCell" onclick="toggle(5)" id="buttonCell5">5</td>
+                  <td class="buttonCell" onclick="toggle(6)" id="buttonCell6">6</td>
+                  <td class="buttonCell" onclick="toggle(7)" id="buttonCell7">7</td>
+                </tr>
+                <tr class="buttonRow">
+                  <td class="buttonCell" onclick="toggle(8)" id="buttonCell8">8</td>
+                  <td class="buttonCell" onclick="toggle(9)" id="buttonCell9">9</td>
+                  <td class="buttonCell" onclick="toggle(10)" id="buttonCell10">A</td>
+                  <td class="buttonCell" onclick="toggle(11)" id="buttonCell11">B</td>
+                </tr>
+                <tr class="buttonRow">
+                  <td class="buttonCell" onclick="toggle(12)" id="buttonCell12">C</td>
+                  <td class="buttonCell" onclick="toggle(13)" id="buttonCell13">D</td>
+                  <td class="buttonCell" onclick="toggle(14)" id="buttonCell14">E</td>
+                  <td class="buttonCell" onclick="toggle(15)" id="buttonCell15">F</td>
+                </tr>
+                <tr class="buttonRow">
+                  <td colspan="4" class="buttonCell" onclick="clearButtons()" id="buttonCell12">Clear</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+          <td id="rollHolder">
+            <div><!--Rolls-->
+              <table id="rollTable">
+                <tr>
+                  <td class="rollCell" id=roll0 />
+                  <td class="rollCell" id=roll1 />
+                  <td class="rollCell" id=roll2 />
+                  <td class="rollCell" id=roll3 />
+                  <td class="rollCell" id=roll4 />
+                  <td class="rollCell" id=roll5 />
+                  <td class="rollCell" id=roll6 />
+                  <td class="rollCell" id=roll7 />
+                </tr>
+              </table>
+            </div>
+
+            <div style="font-size:100%; font-style: arial"><!--Wagers>-->
+              <table>
+                <tr>
+                  <td>
+                    Maximimum Wager = <span id="mw" />
+                  </td>
+                  <td>
+                    Wager :
+                    <input
+                    onchange = "updateTotal()"
+                    style = "font-size : 100%; padding:5px"
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    max="1"
+                    id="bet"
+                    name="bet"
+                    value="0.10"
+                    >
+                  </td>
+                  <td>
+                    Total = <span id=totalBets>0</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div><!--Press Here-->
+              <table>
+                <tr>
+                  <td>
+                    <button onclick = "submitTransaction(targetAddress, adjustedTotal*10**18, messageString)" >
+                      Place Wagers
+                    </button>
+                  </td>
+                    <!--<td>
+                      <span id="message"></span>
+                    </td> -->
+                </tr>
+              </table>
+            </div>
+            <div id="payOut"></div>
+            <div id="transactionAddress"></div>
+          </td>
+        </tr>
+      </table>
+    </table>
+    <div id="panel">
+      <div id='closeButton' onclick='hidePanel()'>x</div>
+      <script>// Panels
+        var flash1="<div id='closeButton' onclick='hidePanel()'>x</div>"
+        +"<p style='font-size:40px'>Welcome to HΞX</p>"
+        +"<p>HΞX is an opportunity to wager on hashed hexadecimal digits.</p>"
+        +"<p>You select the hex numbers that will appear in the last eight digits of a cryptographic hash, generated by a smart contract.</p>"
+        +"<p>If one of your chosen numbers appears, you get back your stake plus the same again for each appearance. </p>"
+        +"<p>For example, if you wager 0.1ETH on the number 8, and the last eight digits of the hash are 8182D833, you will get back 0.4ETH; 0.1ETH for the original stake and 0.3ETH for the three times that the number 8 appears.</p>"
+        +"<p>You can wager on as many of the numbers as you wish, up to a <span id='maximum' onclick='fillPanel(flash2)'>maximum</span> of 0.5ETH on each number.</p>";
+
+        var flash2="<div id='closeButton' onclick='hidePanel()'>x</div>"
+        +"<p>The maximum amount that you can wager on any digit is set at a level (currently 0.5ETH) that will ensure that the size of the pot will always cover the maximum possible pay out.</p>"
+        +"<p>The smart contract uses a relatively simple, and transparent way to generate the hash. This can be seen in the Smart Contract at</p>"
+        +"<p><center><a target='_blank' href='https://etherscan.io/address/0x59cd76b3f40091d9a9fd46cb726671113017ceab#code'>0x59cd76b3f40091d9a9fd46cb726671113017ceab</a></center></p>"
+        +"<p>While this method could be subject to manipulation by Miners, the opportunity cost in doing so would  be such as to make attempted manipulation uneconomic. To ensure that this continues to be the case, the maximum wager will always be limited to 1.0ETH.</p>"
+      </script>
+    </div>
+    <div id="browser">
+      <p>You need to connect to the Ethereum Main Network, with Mist or the MetaMask extension in Chrome.</p>
+    </div>
+  </div>
+  <script>// LOCK AND LOAD
+    if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
+    else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
+    else window.onload = autorun;
+  </script>
+  <div id="iconAcknowledge" style="visibility: collapse">
+    <div> Icons made by <a href="http://www.freepik.com" title="Freepik"> Freepik </a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com </a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank"> CC 3.0 BY </a> </div>
+  </div>
 </body>
 </html>

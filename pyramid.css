@@ -1,0 +1,210 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: midnightblue;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+}
+p {
+  margin: 10px
+}
+button{
+  font-family: monospace;
+  font-size: 40px;
+  height:50px;
+  border-style: outset;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+}
+button:hover{
+  background-color: lightgrey;
+}
+button:active{
+  color:#f00;
+  border-style:inset;
+}
+
+table{
+  /*  width: 100%;
+  border: silver solid thin;
+  border-spacing:0px;
+  */
+}
+td {
+  border: silver solid thin;
+  background-color: whitesmoke;
+  /*    border-radius: 10px;
+  width: 50px;
+  height:50px;
+  text-align: center;*/
+}
+
+.background {
+  position: absolute;
+  display: block;
+  top: 0px;
+  bottom:0px;
+  left: 0px;
+  right: 0px;
+  z-index: 0;
+}
+.flex-container {
+  position:absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top:10px;
+  bottom:10px;
+  left:10px;
+  right:10px;
+  background-color: alicseblue;
+}
+.flex-container>div {
+  background-color: pink;
+}
+
+#header{
+    font-weight: bold;
+    font-size: 150px;
+    font-family: 'Anonymous Pro', monospace;
+    margin: 0px;
+    text-align: center;
+}
+#infoTable {
+  width:500px;
+  text-align: left;
+  font-size: 16px;
+  margin:10px;
+}
+.infoLabel{
+  text-align: right;
+  border-style: none;
+}
+.infoContent {
+  font-family: monospace;
+  text-align: left;
+  border-style: none;
+}
+#filler {
+  height: 15px;
+}
+
+#buttonTable{
+  width:auto;
+  margin:30px;
+  border-spacing:5px;
+}
+.buttonCell{
+  font-family: monospace;
+  font-size: 40px;
+  width:50px;
+  height:50px;
+  border-style: outset;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+}
+.buttonCell:hover{
+  background-color: lightgrey;
+}
+.buttonCell:active{
+  color:#f00;
+  border-style:inset;
+}
+#clearButton {
+  visibility: hidden;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.buttonPad {
+  width: 15px;
+  border-style: none;
+}
+
+#hashSource{
+  font-size: 20px;
+  font-family:monospace;
+  text-align: center;
+  padding: 5px;
+}
+#rightHash {
+  color: red;
+}
+
+#rollHolder {
+  vertical-align: top;
+}
+#rollTable {
+  font-size: 16px;
+  margin: 0px;
+  border-spacing:5px;
+  visibility:collapse;
+}
+.rollCell{
+  font-family: monospace;
+  font-size: 40px;
+  width:50px;
+  height:50px;
+  border-style: outset;
+  border-radius: 10px;
+  text-align: center;
+  cursor: default;
+  background-color: white;
+}
+
+#payOut {
+  font-size: 40px;
+  height: 50px;
+  text-align: center;
+  border-style: inset;
+  margin: 30px;
+  border-radius: 10px;
+  visibility: hidden;
+}
+#transactionAddress {
+  text-align: center;
+  font-size: 14px;
+}
+
+#panel {
+  background-color: white;
+  width: 680px;
+  height: 350px;
+  visibility: hidden;
+  position: absolute;
+  border:silver solid thin;
+  border-radius: 0px;
+  font-size:20px;
+}
+#maximum {
+  color: blue;
+  cursor: pointer;
+}
+#closeButton {
+  position: absolute;
+  right: 0px;
+  color: blue;
+  top: 0px;
+  background-color: white;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  border-radius: 0px;
+  border:none;
+  vertical-align: middle;
+  cursor: pointer;
+}
+#browser {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 400px;
+  visibility: hidden;
+}
+#inner{
+  border: silver solid thin;
+  border-spacing: 0px;
+  opacity:0.25;
+}
