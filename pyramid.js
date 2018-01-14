@@ -1,25 +1,14 @@
 
-var mainAccount , web3 , bal , tHash , maxWager;
+var mainAccount , web3 , bal , tHash , maxWager ;
 
 var abiArray = [ { "constant": false, "inputs": [ { "name": "_amount", "type": "uint256" } ], "name": "withdraw", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_hs", "type": "uint256" } ], "name": "HashSource", "type": "event" } ];
 var targetAddress = "0x300432bA68574DABB8872B7DE90CE84dde861b8c";
 var gas = 20*10**9
 
-function fillPanel(flash) {
-  document.getElementById("panel").innerHTML = flash;
-  showPanel();
-}
-function showPanel() {
-  document.getElementById("panel").style.visibility = "visible";
-}
-function hidePanel() {
-  document.getElementById("panel").style.visibility = "hidden";
-  document.getElementById("inner").style.opacity = 1;
-}
 function autorun(){
   init();
-  document.getElementById("leftHash").innerHTML = "<marquee>Ready to play</marquee>";
-  document.getElementById("rightHash").textContent = "";
+  //document.getElementById("leftHash").innerHTML = "<marquee>Ready to play</marquee>";
+  //document.getElementById("rightHash").textContent = "";
   //fillPanel(flash1);
   //showPanel();
   hidePanel();
@@ -36,21 +25,21 @@ function autorun(){
 }
 
 function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
-  // Checks Web3 support
-  if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
-    // If there's a web3 library loaded, then make your own web3
-    web3 = new Web3(web3.currentProvider);
-    } else if (typeof Web3 !== 'undefined') {
-      // If there isn't then set a provider
-      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    } else if(typeof web3 == 'undefined') {
-      // If there is neither then this isn't an ethereum browser
+  {// Checks Web3 support
+    if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
+      // If there's a web3 library loaded, then make your own web3
+      web3 = new Web3(web3.currentProvider);
+      } else if (typeof Web3 !== 'undefined') {
+        // If there isn't then set a provider
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      } else if(typeof web3 == 'undefined') {
+        // If there is neither then this isn't an ethereum browser
 
-      // browser.style.visibility = "visible";
-      document.getElementById("browser").style.visibility = "visible";
-      return;
-  }
-
+        // browser.style.visibility = "visible";
+        document.getElementById("browser").style.visibility = "visible";
+        return;
+    }
+  }/////////////////////////////////////////////////////////////////
   /*// Check if there are available accounts
 
   // Checks Web3 support
@@ -61,53 +50,65 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
   web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/xb1hnXsk67Yb6pIlVPvv"));
   }
   */
-
-  web3.eth.getBalance(targetAddress, function(err, contractBalance) {
-    if(!err) {
-      console.log(contractBalance);
-    }
-  });
-  ///////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////
+  {// Display Contract Address and Balance
+    document.getElementById("ca").textContent = targetAddress.toUpperCase();
+    web3.eth.getBalance(targetAddress, function(err, contractBalance) {
+      if(!err) {
+        console.log(contractBalance);
+      }
+    });
+  }///////////////////////////////////////////////////////////////////////
+  {// Contract History
+    var outPut = "";
     var MyContract = web3.eth.contract(abiArray);
     var myContractInstance = MyContract.at('0x300432bA68574DABB8872B7DE90CE84dde861b8c');
-
     // watch for an event with {some: 'args'}
-    var events = myContractInstance.allEvents({fromBlock: 0, toBlock: 'latest'});
+    var events = myContractInstance.allEvents({fromBlock: 0});
     events.watch(function(error, result){
-       console.log(result.transactionHash);
+      // console.log(result.transactionHash);
+      if(result.args._receiver) {
+        console.log(result.args._receiver);
+        outPut = outPut + "<div class='card'>"
+                        + result.args._receiver.substring(0,6)
+                        + "..."
+                        + result.args._receiver.substring(38)
+                        + "</div>";
+        //       console.log(result.args);
+        //console.log("")
+      }
+      document.getElementById("leftHash").innerHTML = outPut;
     });
+  }/////////////////////////////////////////////////////////////////
+  {// Get user's ethereum account and Balance
+    web3.eth.getAccounts(function(error,accounts) {
+      // show the floating baloon
+      if (error || !accounts || accounts.length == 0) {
+        document.getElementById("browser").style.visibility = "visible";
+      } else {
+        mainAccount = accounts[0];
+        document.getElementById("ma").textContent = mainAccount.toUpperCase();
 
-  /////////////////////////////////////////////////////////////////
+        web3.eth.getBalance(mainAccount, function(error, accountBalance) {
+          if(!error) {
+            var unformattedAccountBalance = Math.round(accountBalance/10**9)/10**9;
+            document.getElementById("ba").textContent = unformattedAccountBalance.toFixed(9);
+          }
+        });
+      }
+    });
+    // Get contract balance
+    web3.eth.getBalance(targetAddress, function(err, contractBalance) {
+      if(!err) {
+        var unformattedContractBalance = Math.round(contractBalance/10**9)/10**9;
+        maxWager = Math.floor(contractBalance/10**18)/10;
+        if (maxWager > 1) maxWager = 1;
 
-   // Get user's ethereum account
-  web3.eth.getAccounts(function(error,accounts) {
-    // show the floating baloon
-    if (error || !accounts || accounts.length == 0) {
-      document.getElementById("browser").style.visibility = "visible";
-    } else {
-      mainAccount = accounts[0];
-      document.getElementById("ma").textContent = mainAccount.toUpperCase();
-      document.getElementById("ca").textContent = targetAddress.toUpperCase();
-
-      web3.eth.getBalance(mainAccount, function(error, accountBalance) {
-        if(!error) {
-          var unformattedAccountBalance = Math.round(accountBalance/10**9)/10**9;
-          document.getElementById("ba").textContent = unformattedAccountBalance.toFixed(9);
-        }
-      });
-    }
-  });
-  // Get contract balance
-  web3.eth.getBalance(targetAddress, function(err, contractBalance) {
-    if(!err) {
-      var unformattedContractBalance = Math.round(contractBalance/10**9)/10**9;
-      maxWager = Math.floor(contractBalance/10**18)/10;
-      if (maxWager > 1) maxWager = 1;
-
-      document.getElementById("cb").textContent = unformattedContractBalance.toFixed(9);
-      document.getElementById("mw").textContent = maxWager.toFixed(1);
-    }
-  });
+        document.getElementById("cb").textContent = unformattedContractBalance.toFixed(9);
+        document.getElementById("mw").textContent = maxWager.toFixed(1);
+      }
+    });
+  }///////////////////////////////////////////////////////////////////
 }
 
 function submitTransaction(_contractAddress , _value , _data) {
@@ -181,6 +182,18 @@ var bets = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var total = 0;
 var adjustedTotal = 0;
 var messageString = "0x00000000000000000000000000000000";
+
+function fillPanel(flash) {
+  document.getElementById("panel").innerHTML = flash;
+  showPanel();
+}
+function showPanel() {
+  document.getElementById("panel").style.visibility = "visible";
+}
+function hidePanel() {
+  document.getElementById("panel").style.visibility = "hidden";
+  document.getElementById("inner").style.opacity = 1;
+}
 
 function toggle(btn) {
   if (numbtns[btn]==0) {

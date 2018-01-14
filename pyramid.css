@@ -2,17 +2,16 @@ html, body {
   margin: 0;
   padding: 0;
   background-color: midnightblue;
-  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  font-family: monospace;
 }
 p {
   margin: 10px
 }
+.card {
+  font-size: 12px;
+}
 button{
   font-family: monospace;
-  font-size: 40px;
-  height:50px;
-  border-style: outset;
-  border-radius: 10px;
   text-align: center;
   cursor: pointer;
   background-color: white;
@@ -66,16 +65,11 @@ td {
 
 #header{
     font-weight: bold;
-    font-size: 150px;
-    font-family: 'Anonymous Pro', monospace;
     margin: 0px;
     text-align: center;
 }
 #infoTable {
-  width:500px;
   text-align: left;
-  font-size: 16px;
-  margin:10px;
 }
 .infoLabel{
   text-align: right;
@@ -86,22 +80,12 @@ td {
   text-align: left;
   border-style: none;
 }
-#filler {
-  height: 15px;
-}
 
 #buttonTable{
   width:auto;
-  margin:30px;
-  border-spacing:5px;
 }
 .buttonCell{
   font-family: monospace;
-  font-size: 40px;
-  width:50px;
-  height:50px;
-  border-style: outset;
-  border-radius: 10px;
   text-align: center;
   cursor: pointer;
   background-color: white;
@@ -119,15 +103,12 @@ td {
   padding-right: 10px;
 }
 .buttonPad {
-  width: 15px;
   border-style: none;
 }
 
 #hashSource{
-  font-size: 20px;
   font-family:monospace;
   text-align: center;
-  padding: 5px;
 }
 #rightHash {
   color: red;
@@ -137,46 +118,29 @@ td {
   vertical-align: top;
 }
 #rollTable {
-  font-size: 16px;
   margin: 0px;
-  border-spacing:5px;
   visibility:collapse;
 }
 .rollCell{
   font-family: monospace;
-  font-size: 40px;
-  width:50px;
-  height:50px;
-  border-style: outset;
-  border-radius: 10px;
   text-align: center;
   cursor: default;
   background-color: white;
 }
 
 #payOut {
-  font-size: 40px;
-  height: 50px;
-  text-align: center;
-  border-style: inset;
-  margin: 30px;
-  border-radius: 10px;
   visibility: hidden;
 }
 #transactionAddress {
   text-align: center;
-  font-size: 14px;
 }
 
 #panel {
   background-color: white;
-  width: 680px;
-  height: 350px;
   visibility: hidden;
   position: absolute;
   border:silver solid thin;
   border-radius: 0px;
-  font-size:20px;
 }
 #maximum {
   color: blue;
