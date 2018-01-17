@@ -17,156 +17,50 @@
   <body>
     <canvas class="background"></canvas>
     <div class="flex-container" >
-      <table id="inner">
-        <tr> <!-- Header and Info Table-->
-          <td>
-            <div id="header" >
-              
-            </div>
-          </td>
-          <td>
-            <table id="infoTable">
-              <tr>
-                <td class="infoLabel">
-                  Player :
-                </td>
-                <td class="infoContent" >
-                  <span id="ma">
-                    Unable to connect to Main Account
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="infoLabel">
-                   Balance :
-                </td>
-                <td class="infoContent" >
-                  <span style = 'width: 20px' id="ba"></span> Ξther
-                </td>
-              </tr>
-              <tr id="filler">
-              </tr>
-              <tr>
-                <td class="infoLabel">
-                  Contract  :
-                </td>
-                <td class="infoContent" >
-                  <span id="ca"></span>
-                </td>
-              </tr>
-              <tr>
-                <td class="infoLabel">
-                   Balance :
-                </td>
-                <td class="infoContent" >
-                  <span id="cb"></span> Ξther
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr> <!-- Hash Source -->
-          <td colspan="2" id="hashSource">
-            <span id="leftHash"></span><span id="rightHash"></span>
-          </td>
-        </tr>
-        <tr> <!-- Buttons -->
-          <td><!-- Button Table -->
-            <div>
-              <table id="buttonTable" >
-                <tr class="buttonRow">
-                  <td class="buttonCell" onclick="toggle(0)" id="buttonCell0">0</td>
-                  <td class="buttonCell" onclick="toggle(1)" id="buttonCell1">1</td>
-                  <td class="buttonCell" onclick="toggle(2)" id="buttonCell2">2</td>
-                  <td class="buttonCell" onclick="toggle(3)" id="buttonCell3">3</td>
-                </tr>
-                <tr class="buttonRow">
-                  <td class="buttonCell" onclick="toggle(4)" id="buttonCell4">4</td>
-                  <td class="buttonCell" onclick="toggle(5)" id="buttonCell5">5</td>
-                  <td class="buttonCell" onclick="toggle(6)" id="buttonCell6">6</td>
-                  <td class="buttonCell" onclick="toggle(7)" id="buttonCell7">7</td>
-                </tr>
-                <tr class="buttonRow">
-                  <td class="buttonCell" onclick="toggle(8)" id="buttonCell8">8</td>
-                  <td class="buttonCell" onclick="toggle(9)" id="buttonCell9">9</td>
-                  <td class="buttonCell" onclick="toggle(10)" id="buttonCell10">A</td>
-                  <td class="buttonCell" onclick="toggle(11)" id="buttonCell11">B</td>
-                </tr>
-                <tr class="buttonRow">
-                  <td class="buttonCell" onclick="toggle(12)" id="buttonCell12">C</td>
-                  <td class="buttonCell" onclick="toggle(13)" id="buttonCell13">D</td>
-                  <td class="buttonCell" onclick="toggle(14)" id="buttonCell14">E</td>
-                  <td class="buttonCell" onclick="toggle(15)" id="buttonCell15">F</td>
-                </tr>
-                <tr class="buttonRow">
-                  <td colspan="4" class="buttonCell" onclick="clearButtons()" id="buttonCell12">Clear</td>
-                </tr>
-              </table>
-            </div>
-          </td>
-          <td id="rollHolder">
-            <div><!--Rolls-->
-              <table id="rollTable">
-                <tr>
-                  <td class="rollCell" id=roll0 />
-                  <td class="rollCell" id=roll1 />
-                  <td class="rollCell" id=roll2 />
-                  <td class="rollCell" id=roll3 />
-                  <td class="rollCell" id=roll4 />
-                  <td class="rollCell" id=roll5 />
-                  <td class="rollCell" id=roll6 />
-                  <td class="rollCell" id=roll7 />
-                </tr>
-              </table>
-            </div>
+      <table>
+        <tr><td>
+        <table id="infoTable">
+          <tr>
+            <td class="infoLabel">
+              Player :
+            </td>
+            <td class="infoContent" >
+              <span id="ma">
+                Unable to connect to Main Account
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="infoLabel">
+              Balance :
+            </td>
+            <td class="infoContent" >
+              <span style = 'width: 20px' id="ba" /> Ξther
+            </td>
+          </tr>
+          <tr>
+            <td class="infoLabel">
+              Contract  :
+            </td>
+            <td class="infoContent" >
+              <span id="ca"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="infoLabel">
+              Balance :
+            </td>
+            <td class="infoContent" >
+              <span id="cb"></span> Ξther
+            </td>
+          </tr>
+        </table>
+      </td></tr><tr>
 
-            <div style="font-size:100%; font-style: arial"><!--Wagers>-->
-              <table>
-                <tr>
-                  <td>
-                    Maximimum Wager = <span id="mw" />
-                  </td>
-                  <td>
-                    Wager :
-                    <input
-                    onchange = "updateTotal()"
-                    style = "font-size : 100%; padding:5px"
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    max="1"
-                    id="bet"
-                    name="bet"
-                    value="0.10"
-                    >
-                  </td>
-                  <td>
-                    Total = <span id=totalBets>0</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-            <div><!--Press Here-->
-              <table>
-                <tr>
-                  <td>
-                    <button onclick = "submitTransaction(targetAddress, adjustedTotal*10**18, messageString)" >
-                      Place Wagers
-                    </button>
-                  </td>
-                    <!--<td>
-                      <span id="message"></span>
-                    </td> -->
-                </tr>
-              </table>
-            </div>
-            <div id="payOut"></div>
-            <div id="transactionAddress"></div>
-          </td>
-        </tr>
-      </table>
-    </table>
+      <td>
+      <div id=hashList />
+    </td>
+    </tr></table>
     <div id="panel">
       <div id='closeButton' onclick='hidePanel()'>x</div>
       <script>// Panels

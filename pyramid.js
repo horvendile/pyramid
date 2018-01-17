@@ -1,21 +1,21 @@
 
 var mainAccount , web3 , bal , tHash , maxWager ;
+{
+  var abiArray = [ { "constant": false, "inputs": [ { "name": "_amount", "type": "uint256" } ], "name": "withdraw", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_hs", "type": "uint256" } ], "name": "HashSource", "type": "event" } ];
+  var targetAddress = "0x300432bA68574DABB8872B7DE90CE84dde861b8c";
+  var gas = 20*10**9
+}
+function trunc(addr) {
+  return addr.substring(0,6)+"..."+addr.substring(38);
+}
 
-var abiArray = [ { "constant": false, "inputs": [ { "name": "_amount", "type": "uint256" } ], "name": "withdraw", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_hs", "type": "uint256" } ], "name": "HashSource", "type": "event" } ];
-var targetAddress = "0x300432bA68574DABB8872B7DE90CE84dde861b8c";
-var gas = 20*10**9
 
 function autorun(){
   init();
-  //document.getElementById("leftHash").innerHTML = "<marquee>Ready to play</marquee>";
-  //document.getElementById("rightHash").textContent = "";
-  //fillPanel(flash1);
-  //showPanel();
-  hidePanel();
 
   Particles.init({
     selector: '.background',
-    color: '#75A5B7',
+    color: '#888888',
     maxParticles: 50,
     connectParticles: true,
     speed:1,
@@ -39,18 +39,18 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
         document.getElementById("browser").style.visibility = "visible";
         return;
     }
-  }/////////////////////////////////////////////////////////////////
-  /*// Check if there are available accounts
+    /////////////////////////////////////////////////////////////////
+    /*// Check if there are available accounts
 
-  // Checks Web3 support
-  if (typeof web3 !== 'undefined') {
-  // If there isn't then set a provider
-  web3 = new Web3(web3.currentProvider);
-  } else { // use Infura if it's not there
-  web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/xb1hnXsk67Yb6pIlVPvv"));
-  }
-  */
-  //////////////////////////////////////////////////////////////////////
+    // Checks Web3 support
+    if (typeof web3 !== 'undefined') {
+    // If there isn't then set a provider
+    web3 = new Web3(web3.currentProvider);
+    } else { // use Infura if it's not there
+    web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/xb1hnXsk67Yb6pIlVPvv"));
+    }
+    */
+  }//////////////////////////////////////////////////////////////////////
   {// Display Contract Address and Balance
     document.getElementById("ca").textContent = targetAddress.toUpperCase();
     web3.eth.getBalance(targetAddress, function(err, contractBalance) {
@@ -61,23 +61,33 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
   }///////////////////////////////////////////////////////////////////////
   {// Contract History
     var outPut = "";
+    var listCount = 0;
     var MyContract = web3.eth.contract(abiArray);
     var myContractInstance = MyContract.at('0x300432bA68574DABB8872B7DE90CE84dde861b8c');
     // watch for an event with {some: 'args'}
     var events = myContractInstance.allEvents({fromBlock: 0});
     events.watch(function(error, result){
-      // console.log(result.transactionHash);
+
       if(result.args._receiver) {
         console.log(result.args._receiver);
-        outPut = outPut + "<div class='card'>"
-                        + result.args._receiver.substring(0,6)
-                        + "..."
-                        + result.args._receiver.substring(38)
-                        + "</div>";
-        //       console.log(result.args);
-        //console.log("")
+      listCount ++;
+      var newCard = document.createElement("div");
+      newCard.setAttribute("id", "card"+listCount);
+      newCard.setAttribute("class", "card");
+      var node = document.createTextNode("");
+      newCard.appendChild(node);
+      var element = document.getElementById("hashList");
+      element.appendChild(newCard);
+
+      document.getElementById("card"+listCount).textContent = trunc(result.args._receiver);
+      document.getElementById("card"+listCount).style.top = 100+15*listCount+"px";
+      document.getElementById("card"+listCount).style.left = 100+15*listCount+"px";
+
+
+
+
+
       }
-      document.getElementById("leftHash").innerHTML = outPut;
     });
   }/////////////////////////////////////////////////////////////////
   {// Get user's ethereum account and Balance
@@ -100,12 +110,7 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
     // Get contract balance
     web3.eth.getBalance(targetAddress, function(err, contractBalance) {
       if(!err) {
-        var unformattedContractBalance = Math.round(contractBalance/10**9)/10**9;
-        maxWager = Math.floor(contractBalance/10**18)/10;
-        if (maxWager > 1) maxWager = 1;
-
-        document.getElementById("cb").textContent = unformattedContractBalance.toFixed(9);
-        document.getElementById("mw").textContent = maxWager.toFixed(1);
+        document.getElementById("cb").textContent = (Math.round(contractBalance/10**9)/10**9).toFixed(9);
       }
     });
   }///////////////////////////////////////////////////////////////////
@@ -175,82 +180,13 @@ function clearRolls() {
         document.getElementById("roll"+i).textContent = "";
       }
     }
-
-//var hexArray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","Đ","Ξ","F"]
-var numbtns = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var bets = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var total = 0;
-var adjustedTotal = 0;
-var messageString = "0x00000000000000000000000000000000";
-
-function fillPanel(flash) {
-  document.getElementById("panel").innerHTML = flash;
-  showPanel();
-}
-function showPanel() {
-  document.getElementById("panel").style.visibility = "visible";
-}
-function hidePanel() {
-  document.getElementById("panel").style.visibility = "hidden";
-  document.getElementById("inner").style.opacity = 1;
+{//var hexArray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","Đ","Ξ","F"]
+  var numbtns = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  var bets = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  var total = 0;
+  var adjustedTotal = 0;
 }
 
-function toggle(btn) {
-  if (numbtns[btn]==0) {
-    numbtns[btn] = 1;
-    document.getElementById("buttonCell"+btn).style.borderStyle = "inset";
-    document.getElementById("buttonCell"+btn).style.color = "red";
-    total++ ;
-  }
-  else {
-    numbtns[btn] = 0;
-    document.getElementById("buttonCell"+btn).style.borderStyle = "outset";
-    document.getElementById("buttonCell"+btn).style.color = "black";
-    total-- ;
-  }
-  updateString();
-  updateTotal();
-}
-function clearButtons() {
-  for ( i=0; i<16 ; i++ ) {
-    if ( numbtns[i] ==1 ) {
-      toggle(i);
-    }
-  }
-  updateString();
-  updateTotal();
-}
-function oddButtons() {
-  clearButtons();
-  toggle(1);
-  toggle(3);
-  toggle(5);
-  toggle(7);
-  toggle(9);
-  toggle(11);
-  toggle(13);
-  toggle(15);
-}
-function evenButtons() {
-  clearButtons();
-  toggle(2);
-  toggle(4);
-  toggle(6);
-  toggle(8);
-  toggle(10);
-  toggle(12);
-  toggle(14);
-  toggle(0);
-}
-function primeButtons() {
-  clearButtons();
-  toggle(2);
-  toggle(3);
-  toggle(5);
-  toggle(7);
-  toggle(11);
-  toggle(13);
-}
 
 function updateString(){
   messageString = "0x";

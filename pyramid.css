@@ -1,7 +1,6 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: midnightblue;
   font-family: monospace;
 }
 p {
@@ -9,26 +8,8 @@ p {
 }
 .card {
   font-size: 12px;
-}
-button{
-  font-family: monospace;
   text-align: center;
-  cursor: pointer;
-  background-color: white;
-}
-button:hover{
-  background-color: lightgrey;
-}
-button:active{
-  color:#f00;
-  border-style:inset;
-}
-
-table{
-  /*  width: 100%;
-  border: silver solid thin;
-  border-spacing:0px;
-  */
+  position: absolute;
 }
 td {
   border: silver solid thin;
@@ -60,14 +41,9 @@ td {
   background-color: alicseblue;
 }
 .flex-container>div {
-  background-color: pink;
+  background-color: whitesmoke;
 }
 
-#header{
-    font-weight: bold;
-    margin: 0px;
-    text-align: center;
-}
 #infoTable {
   text-align: left;
 }
@@ -81,70 +57,12 @@ td {
   border-style: none;
 }
 
-#buttonTable{
-  width:auto;
-}
-.buttonCell{
-  font-family: monospace;
-  text-align: center;
-  cursor: pointer;
-  background-color: white;
-}
-.buttonCell:hover{
-  background-color: lightgrey;
-}
-.buttonCell:active{
-  color:#f00;
-  border-style:inset;
-}
-#clearButton {
-  visibility: hidden;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-.buttonPad {
-  border-style: none;
-}
-
-#hashSource{
-  font-family:monospace;
-  text-align: center;
-}
-#rightHash {
-  color: red;
-}
-
-#rollHolder {
-  vertical-align: top;
-}
-#rollTable {
-  margin: 0px;
-  visibility:collapse;
-}
-.rollCell{
-  font-family: monospace;
-  text-align: center;
-  cursor: default;
-  background-color: white;
-}
-
-#payOut {
-  visibility: hidden;
-}
-#transactionAddress {
-  text-align: center;
-}
-
 #panel {
   background-color: white;
   visibility: hidden;
   position: absolute;
   border:silver solid thin;
   border-radius: 0px;
-}
-#maximum {
-  color: blue;
-  cursor: pointer;
 }
 #closeButton {
   position: absolute;
@@ -166,9 +84,5 @@ td {
   right: 50px;
   width: 400px;
   visibility: hidden;
-}
-#inner{
-  border: silver solid thin;
-  border-spacing: 0px;
-  opacity:0.25;
+  background-color: pink;
 }
