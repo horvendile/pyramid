@@ -6,7 +6,7 @@ var mainAccount , web3 , bal , tHash , maxWager ;
   var gas = 20*10**9
 }
 function trunc(addr) {
-  return addr.substring(0,6)+"..."+addr.substring(38);
+  return addr.substring(0,4)+"..."+addr.substring(40);
 }
 
 
@@ -26,7 +26,7 @@ function autorun(){
 
 function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
   {// Checks Web3 support
-    if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
+  /*  if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
       // If there's a web3 library loaded, then make your own web3
       web3 = new Web3(web3.currentProvider);
       } else if (typeof Web3 !== 'undefined') {
@@ -40,7 +40,8 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
         return;
     }
     /////////////////////////////////////////////////////////////////
-    /*// Check if there are available accounts
+    /*
+    // Check if there are available accounts
 
     // Checks Web3 support
     if (typeof web3 !== 'undefined') {
