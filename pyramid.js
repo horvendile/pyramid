@@ -26,7 +26,7 @@ function autorun(){
 
 function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
   {// Checks Web3 support
-  /*  if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
+    if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
       // If there's a web3 library loaded, then make your own web3
       web3 = new Web3(web3.currentProvider);
       } else if (typeof Web3 !== 'undefined') {
