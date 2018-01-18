@@ -6,7 +6,7 @@ var mainAccount , web3 , bal , tHash , maxWager ;
   var gas = 20*10**9
 }
 function trunc(addr) {
-  return addr.substring(0,4)+"..."+addr.substring(40);
+  return addr.substring(0,4)+"..."+addr.substring(addr.length-2);
 }
 
 
@@ -70,7 +70,7 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
     events.watch(function(error, result){
 
       if(result.args._receiver) {
-        console.log(result.args._receiver);
+        console.log(result);
       listCount ++;
       var newCard = document.createElement("div");
       newCard.setAttribute("id", "card"+listCount);
@@ -80,8 +80,8 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
       var element = document.getElementById("hashList");
       element.appendChild(newCard);
 
-      document.getElementById("card"+listCount).textContent = trunc(result.args._receiver);
-      document.getElementById("card"+listCount).style.top = 100+15*listCount+"px";
+      document.getElementById("card"+listCount).innerHTML = trunc(result.transactionHash)+"<br>"+trunc(result.args._receiver);
+      document.getElementById("card"+listCount).style.top = 100+18*listCount+"px";
       document.getElementById("card"+listCount).style.left = 100+15*listCount+"px";
 
 

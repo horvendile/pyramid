@@ -10,6 +10,11 @@ p {
   font-size: 12px;
   text-align: center;
   position: absolute;
+  background-color: whitesmoke;
+  padding: 2px;
+  padding-bottom: 20px;
+  border: black solid thin;
+  border-radius: 0px;
 }
 td {
   border: silver solid thin;
