@@ -1,21 +1,21 @@
 
-var mainAccount , web3 , bal , tHash , maxWager ;
-{
-  var abiArray = [ { "constant": false, "inputs": [ { "name": "_amount", "type": "uint256" } ], "name": "withdraw", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "payable": true, "stateMutability": "payable", "type": "fallback" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_hs", "type": "uint256" } ], "name": "HashSource", "type": "event" } ];
-  var targetAddress = "0x300432bA68574DABB8872B7DE90CE84dde861b8c";
+{// var settings //
+  var mainAccount , web3 , bal , tHash , maxWager ;
+  var abiArray = [ { "constant": true, "inputs": [], "name": "creator", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_cardID", "type": "uint256" } ], "name": "logIssue", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_fromID", "type": "uint256" }, { "name": "_buyer", "type": "address" } ], "name": "newCards", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "_cardID", "type": "uint256" } ], "name": "checkCardExists", "outputs": [ { "name": "exists", "type": "bool", "value": false } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "_cardID", "type": "uint256" } ], "name": "getCardDetails", "outputs": [ { "name": "ID", "type": "uint256", "value": "0" }, { "name": "cardDetails", "type": "address[6]", "value": [ "0x0000000000000000000000000000000000000000", "0x0000000000000000000000000000000000000000", "0x0000000000000000000000000000000000000000", "0x0000000000000000000000000000000000000000", "0x0000000000000000000000000000000000000000", "0x0000000000000000000000000000000000000000" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_cardNumber", "type": "uint256" } ], "name": "revive", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "spawnAddresses", "type": "address[6]" } ], "name": "spawnCard", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_cardNumber", "type": "uint256" } ], "name": "rollCard", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_cardID", "type": "uint256" } ], "name": "buyCard", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "cardCost", "outputs": [ { "name": "", "type": "uint256", "value": "100000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_sender", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" }, { "indexed": false, "name": "_message", "type": "bytes" } ], "name": "Deposit", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "ID", "type": "uint256" }, { "indexed": false, "name": "h0", "type": "address" }, { "indexed": false, "name": "h1", "type": "address" }, { "indexed": false, "name": "h2", "type": "address" }, { "indexed": false, "name": "h3", "type": "address" }, { "indexed": false, "name": "h4", "type": "address" }, { "indexed": false, "name": "h5", "type": "address" } ], "name": "Issue", "type": "event" } ]  ;
+  var targetAddress = "0x8a4b750C018272DbF66777aEf3650063425f7718";
   var gas = 20*10**9
 }
+
 function trunc(addr) {
   return addr.substring(0,4)+"..."+addr.substring(addr.length-2);
 }
-
 
 function autorun(){
   init();
 
   Particles.init({
     selector: '.background',
-    color: '#888888',
+    color: '#fffff0',
     maxParticles: 50,
     connectParticles: true,
     speed:1,
@@ -52,45 +52,6 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
     }
     */
   }//////////////////////////////////////////////////////////////////////
-  {// Display Contract Address and Balance
-    document.getElementById("ca").textContent = targetAddress.toUpperCase();
-    web3.eth.getBalance(targetAddress, function(err, contractBalance) {
-      if(!err) {
-        console.log(contractBalance);
-      }
-    });
-  }///////////////////////////////////////////////////////////////////////
-  {// Contract History
-    var outPut = "";
-    var listCount = 0;
-    var MyContract = web3.eth.contract(abiArray);
-    var myContractInstance = MyContract.at('0x300432bA68574DABB8872B7DE90CE84dde861b8c');
-    // watch for an event with {some: 'args'}
-    var events = myContractInstance.allEvents({fromBlock: 0});
-    events.watch(function(error, result){
-
-      if(result.args._receiver) {
-        console.log(result);
-      listCount ++;
-      var newCard = document.createElement("div");
-      newCard.setAttribute("id", "card"+listCount);
-      newCard.setAttribute("class", "card");
-      var node = document.createTextNode("");
-      newCard.appendChild(node);
-      var element = document.getElementById("hashList");
-      element.appendChild(newCard);
-
-      document.getElementById("card"+listCount).innerHTML = trunc(result.transactionHash)+"<br>"+trunc(result.args._receiver);
-      document.getElementById("card"+listCount).style.top = 100+18*listCount+"px";
-      document.getElementById("card"+listCount).style.left = 100+15*listCount+"px";
-
-
-
-
-
-      }
-    });
-  }/////////////////////////////////////////////////////////////////
   {// Get user's ethereum account and Balance
     web3.eth.getAccounts(function(error,accounts) {
       // show the floating baloon
@@ -115,6 +76,76 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
       }
     });
   }///////////////////////////////////////////////////////////////////
+  {  // Display Contract Address and Balance
+    document.getElementById("ca").textContent = targetAddress.toUpperCase();
+    web3.eth.getBalance(targetAddress, function(err, contractBalance) {
+      if(!err) {
+        console.log(contractBalance);
+        console.log("------------------------");
+      }
+    });
+  }  ///////////////////////////////////////////////////////////////////////
+  {// Instantiate Contract
+    var outPut = "";
+    var listCount = 0;
+    var MyContract = web3.eth.contract(abiArray);
+    var myContractInstance = MyContract.at(targetAddress);
+  }//////////////////////////////////////////////////////////////////////
+  {// watch for an event with {some: 'args'}
+    var events = myContractInstance.allEvents({fromBlock: 0});
+    events.watch(function(error, result){
+      //console.log(result);
+    });
+  }/////////////////////////////////////////////////////////////////
+  {// get Highest Card Number (numCards)
+    //web3.eth.contract(abiArray).at(targetAddress).checkCardExists(cardNumber,function(error,exists) {});
+
+  }//////////////////////////////////////////////////////////////////////
+
+  {// Get Cards by ID
+    listCount = 0;
+    for (i=230;i<250;i++) {
+      web3.eth.contract(abiArray).at(targetAddress).getCardDetails(i,function(error,details) {
+        cardNumber = details[0].c[0];
+        web3.eth.contract(abiArray).at(targetAddress).checkCardExists(cardNumber,function(error,exists) {
+          if (exists) {
+            listCount++;
+            cardFill = "<div class = 'cardHead'>" + details[0].c[0] + "</div>";
+            for ( h = 0 ; h<6 ; h++ ) {
+              if (details[1][h] == mainAccount) {
+                cardFill = cardFill + "<div style='color:red'>" + trunc(details[1][h]) + "</div>";
+              }
+              else {
+                cardFill = cardFill + "<div>" + trunc(details[1][h]) + "</div>";
+              }
+            }
+            var newCard = document.createElement("div");
+            newCard.setAttribute("id", "card"+listCount);
+            newCard.setAttribute("class", "card");
+            newCard.setAttribute("onclick", "drawCard("+details[0].c[0]+")");
+
+            var node = document.createTextNode("");
+
+            newCard.appendChild(node);
+            var element = document.getElementById("cardSpace");
+            element.appendChild(newCard);
+
+            document.getElementById("card"+listCount).innerHTML = cardFill;
+            document.getElementById("card"+listCount).style.top = 100+8*listCount+"px";
+            document.getElementById("card"+listCount).style.left = 10+75*listCount+"px";
+
+            console.log(details[0].c[0]);
+            console.log(details[1]);
+          }
+        })
+      })
+    }
+  }/////////////////////////////////////////////////////////////////////
+
+}
+
+function drawCard (cardToBeDrawn) {
+  alert(cardToBeDrawn);
 }
 
 function submitTransaction(_contractAddress , _value , _data) {

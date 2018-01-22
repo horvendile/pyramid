@@ -65,11 +65,18 @@ contract chain {
         newCards(_cardID, cardBuyer);
     }
 
-    function getCardDetails (uint256 _cardID) public constant returns (address cardDetails) {
-        cardDetails = cards[_cardID].h3;
+    function getCardDetails (uint256 _cardID) public constant returns (address[6] cardDetails) {
+        cardDetails[0] = cards[_cardID].h0;
+        cardDetails[1] = cards[_cardID].h1;
+        cardDetails[2] = cards[_cardID].h2;
+        cardDetails[3] = cards[_cardID].h3;
+        cardDetails[4] = cards[_cardID].h4;
+        cardDetails[5] = cards[_cardID].h5;
     }
 
-    function
+    function checkCardExists (uint256 _cardID) public constant returns (bool exists) {
+        exists = cardExists[_cardID];
+    }
 
     function transferPayment(uint payment, address recipient) internal {
         recipient.transfer(payment);
