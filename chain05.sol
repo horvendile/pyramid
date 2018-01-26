@@ -1,23 +1,25 @@
 pragma solidity ^0.4.17;
 
 contract chain05 {
+
     address public creator;
-    uint256 public cardCost;
-    address public player;
-    //address[5] public heirList;
-     uint256 numCards;
+    uint public cardCost;
+    uint numCards;
 
     struct List {
         bool exists;
         address[5] heirs;
     }
 
-    mapping (uint256 => bool) private cardExists;
-    mapping (uint256 => List) private lists;
+    mapping (uint => List) private lists;
 
-    event Deposit(address _sender, uint _value, bytes _message);
-    event Sent(address indexed _receiver, uint _value);
-    event Issue(uint256 ID,address h0, address h1, address h2, address h3, address h4, address h5);
+    event Sent(address indexed _receiver , uint _value);
+    event Issue(uint ID , address h0 , address h1 , address h2 , address h3 , address h4 );
+
+    modifier isCreator() {
+        if ( msg.sender != creator) revert();
+        _;
+    }
 
     function chain05() payable public {
         creator = msg.sender;
@@ -25,8 +27,7 @@ contract chain05 {
         numCards = 234;
     }
 
-    function createList(address[5] _newAddresses) public {
-        if (msg.sender != creator) revert();
+    function createList(address[5] _newAddresses) public isCreator {
         numCards++;
         lists[numCards].heirs = _newAddresses;
         lists[numCards].exists = true;
@@ -44,8 +45,8 @@ contract chain05 {
         numCards += 3;
     }
 
-    function logIssue (uint256 _ID) public {
-        Issue(_ID , lists[_ID].heirs[0] , lists[_ID].heirs[1] , lists[_ID].heirs[2] , lists[_ID].heirs[3] , lists[_ID].heirs[4] ,0 );
+    function logIssue (uint _ID) public {
+        Issue(_ID , lists[_ID].heirs[0] , lists[_ID].heirs[1] , lists[_ID].heirs[2] , lists[_ID].heirs[3] , lists[_ID].heirs[4] );
     }
 
     function buyList(uint _ID) public payable {
@@ -55,15 +56,15 @@ contract chain05 {
         if (!lists[_ID].exists) revert();
         transferPayment(cardCost / 2 , lists[_ID].heirs[0]);
         transferPayment(cardCost / 2 , lists[_ID].heirs[4]);
-        lists[_ID].exists = false;
         newLists(_ID , buyer);
+        lists[_ID].exists = false;
     }
 
-    function getListDetails( uint256 _ID) public constant returns ( uint256 ID , List listDetails) {
+    function getListDetails( uint _ID) public constant returns ( uint ID , bool listExists , address[5] listDetails) {
         ID = _ID;
-        listDetails.exists = lists[_ID].exists;
+        listExists = lists[_ID].exists;
         for (uint i = 0 ; i < 5 ; i++) {
-            listDetails.heirs[i] = lists[_ID].heirs[i];
+            listDetails[i] = lists[_ID].heirs[i];
         }
     }
 
@@ -72,8 +73,7 @@ contract chain05 {
         Sent(recipient, payment);
     }
 
-    function kill() public {
-        if ( msg.sender != creator) revert();
+    function kill() public isCreator {
         selfdestruct(creator);
     }
 
