@@ -4,11 +4,12 @@ contract chain05 {
 
     address public creator;
     uint public cardCost;
-    uint numCards;
+    uint public numCards;
 
     struct List {
         bool exists;
         address[5] heirs;
+        uint discount;
     }
 
     mapping (uint => List) private lists;
@@ -55,17 +56,26 @@ contract chain05 {
         if (payment != cardCost) revert();
         if (!lists[_ID].exists) revert();
         transferPayment(cardCost / 2 , lists[_ID].heirs[0]);
-        transferPayment(cardCost / 2 , lists[_ID].heirs[4]);
+        transferPayment(cardCost / 2 * (100 - lists[_ID].discount ) / 100 , lists[_ID].heirs[4]);
         newLists(_ID , buyer);
         lists[_ID].exists = false;
     }
 
-    function getListDetails( uint _ID) public constant returns ( uint ID , bool listExists , address[5] listDetails) {
+    function getListDetails( uint _ID) public constant returns ( uint ID , bool listExists , address[5] listDetails , uint listDiscount) {
         ID = _ID;
         listExists = lists[_ID].exists;
+        listDiscount = lists[_ID].discount;
         for (uint i = 0 ; i < 5 ; i++) {
             listDetails[i] = lists[_ID].heirs[i];
         }
+    }
+
+    function applyDiscount( uint _ID , uint _discount) public {
+        if (lists[_ID].heirs[4] != msg.sender) revert();
+        if ( _discount > 50 ) revert();
+        if ( _discount < 0 ) revert();
+        lists[_ID].discount = _discount;
+
     }
 
     function transferPayment(uint payment, address recipient) internal {
