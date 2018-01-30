@@ -1,7 +1,7 @@
 
 {// var settings //
   var mainAccount , web3 , bal , tHash , maxWager ;
-  var abiArray = [ { "constant": true, "inputs": [], "name": "creator", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "logIssue", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "getListDetails", "outputs": [ { "name": "ID", "type": "uint256", "value": "237" }, { "name": "listExists", "type": "bool", "value": true }, { "name": "listDetails", "type": "address[5]", "value": [ "0xae0aef78bff773f63c7f9bd916d1affa6c3cd319", "0xe20ba7fa60dd419123f99c64671eb95ef02767af", "0x7abfae5cd000c5d23e87a050c4e69a9d7d48b627", "0x68e58b950f17e8f386088bccb703bbd88e415d2e", "0x2ff10986b8877248112815f1d46f358b32161883" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_newAddresses", "type": "address[5]" } ], "name": "createList", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "buyList", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "cardCost", "outputs": [ { "name": "", "type": "uint256", "value": "100000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "ID", "type": "uint256" }, { "indexed": false, "name": "h0", "type": "address" }, { "indexed": false, "name": "h1", "type": "address" }, { "indexed": false, "name": "h2", "type": "address" }, { "indexed": false, "name": "h3", "type": "address" }, { "indexed": false, "name": "h4", "type": "address" } ], "name": "Issue", "type": "event" } ] ;
+  var abiArray = [ { "constant": true, "inputs": [], "name": "creator", "outputs": [ { "name": "", "type": "address", "value": "0x2ff10986b8877248112815f1d46f358b32161883" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "logIssue", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "getListDetails", "outputs": [ { "name": "ID", "type": "uint256", "value": "237" }, { "name": "listExists", "type": "bool", "value": true }, { "name": "listDetails", "type": "address[5]", "value": [ "0xae0aef78bff773f63c7f9bd916d1affa6c3cd319", "0xe20ba7fa60dd419123f99c64671eb95ef02767af", "0x7abfae5cd000c5d23e87a050c4e69a9d7d48b627", "0x68e58b950f17e8f386088bccb703bbd88e415d2e", "0x2ff10986b8877248112815f1d46f358b32161883" ] } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_newAddresses", "type": "address[5]" } ], "name": "createList", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_ID", "type": "uint256" } ], "name": "buyList", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "listCost", "outputs": [ { "name": "", "type": "uint256", "value": "100000000000000000" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": true, "stateMutability": "payable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "name": "_receiver", "type": "address" }, { "indexed": false, "name": "_value", "type": "uint256" } ], "name": "Sent", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "ID", "type": "uint256" }, { "indexed": false, "name": "h0", "type": "address" }, { "indexed": false, "name": "h1", "type": "address" }, { "indexed": false, "name": "h2", "type": "address" }, { "indexed": false, "name": "h3", "type": "address" }, { "indexed": false, "name": "h4", "type": "address" } ], "name": "Issue", "type": "event" } ] ;
   var targetAddress = "0xB1FA390C3613d0984E02B32e3F44C9D53FcD2E30";
   var gas = 20*10**9
 }
@@ -80,14 +80,14 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
 
     });
   }/////////////////////////////////////////////////////////////////
-  {// get Highest Card Number (numCards)
+  {// get Highest List Number (numLists)
     web3.eth.contract(abiArray).at(targetAddress).creator(function(error,creatorAddress) {
       console.log(creatorAddress);
     });
 
   }//////////////////////////////////////////////////////////////////////
 
-  {// Get Cards by ID
+  {// Get Lists by ID
     listCount = 0;
     for (i=200;i<300;i++) {
       web3.eth.contract(abiArray).at(targetAddress).getListDetails(i,function(error,details) {
@@ -96,36 +96,36 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
         listExists = details[1];
         //if (listExists) {
         if (listExists) {
-          cardID= details[0].c[0];
-          headString = cardID;
-          //headString="000000"+cardID.toString(16);
+          listID= details[0].c[0];
+          headString = listID;
+          //headString="000000"+listID.toString(16);
           //headString = headString.substring(headString.length-6,headString.length);
-          cardFill = "<div class = 'cardHead'>" + headString + "</div>";
-          showCard = true;
+          listFill = "<div class = 'listHead'>" + headString + "</div>";
+          showList = true;
           for ( h = 0 ; h<5 ; h++ ) {
             if (details[2][h] == mainAccount) {
-              showCard = true;
-              cardFill = cardFill + "<div style='color:red'>" + trunc(details[2][h]) + "</div>";
+              showList = true;
+              listFill = listFill + "<div style='color:red'>" + trunc(details[2][h]) + "</div>";
             }
             else {
-              cardFill = cardFill + "<div>" + trunc(details[2][h]) + "</div>";
+              listFill = listFill + "<div>" + trunc(details[2][h]) + "</div>";
             }
           }
-          if(showCard){
-          var newCard = document.createElement("div");
-          newCard.setAttribute("id", "card"+listCount);
-          newCard.setAttribute("class", "card");
-          newCard.setAttribute("onclick", "drawCard("+details[0].c[0]+")");
+          if(showList){
+          var newList = document.createElement("div");
+          newList.setAttribute("id", "list"+listCount);
+          newList.setAttribute("class", "list");
+          newList.setAttribute("onclick", "drawList("+details[0].c[0]+")");
           var node = document.createTextNode("");
-          newCard.appendChild(node);
-          var element = document.getElementById("cardSpace");
-          element.appendChild(newCard);
-          document.getElementById("card"+listCount).innerHTML = cardFill;
+          newList.appendChild(node);
+          var element = document.getElementById("listSpace");
+          element.appendChild(newList);
+          document.getElementById("list"+listCount).innerHTML = listFill;
           colCount = Math.floor(window.innerWidth/80);
           row = Math.floor(listCount/colCount);
           col = (listCount - row*colCount);
-          document.getElementById("card"+listCount).style.top = row*115+"px";
-          document.getElementById("card"+listCount).style.left = col*80+"px";
+          document.getElementById("list"+listCount).style.top = row*115+"px";
+          document.getElementById("list"+listCount).style.left = col*80+"px";
           listCount++;
           //console.log(details[0].c[0],details);
         }
@@ -147,14 +147,14 @@ function getEventLogs() {
     console.log(details);
   });
 }
-function drawCard (cardToBeDrawn) {
-  web3.eth.contract(abiArray).at(targetAddress).getListDetails(cardToBeDrawn,function(error,cardDetails) {
+function drawList (listToBeDrawn) {
+  web3.eth.contract(abiArray).at(targetAddress).getListDetails(listToBeDrawn,function(error,listDetails) {
     if(!error) {
-      document.getElementById("fullCard").style.visibility = "visible";
-      document.getElementById("fcHead").textContent = cardDetails[0].c[0];
+      document.getElementById("fullList").style.visibility = "visible";
+      document.getElementById("fcHead").textContent = listDetails[0].c[0];
       for (i=0;i<5;i++) {
-        document.getElementById("fc"+i).textContent = cardDetails[2][i];
-        if (cardDetails[2][i] == mainAccount) {
+        document.getElementById("fc"+i).textContent = listDetails[2][i];
+        if (listDetails[2][i] == mainAccount) {
           document.getElementById("fc"+i).style.color = "red";
         }
         else {
@@ -174,11 +174,11 @@ function buyList(ID) {
   }
 
 
-function hideFullCard(){
-  document.getElementById("fullCard").style.visibility = "collapse";
+function hideFullList(){
+  document.getElementById("fullList").style.visibility = "collapse";
 }
 
-function spawnCard() {
+function spawnList() {
   window.open("spawn.html","_blank");
 }
 
