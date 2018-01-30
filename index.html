@@ -27,10 +27,10 @@
       </tr>
     </table>
     <canvas class="background"></canvas>
-    <div id="cardSpace" name="cardSpace"></div>
+    <div id="listSpace" name="listSpace"></div>
 
-    <div id="fullCard">
-      <div id='closeButton' onclick='hideFullCard()'>x</div>
+    <div id="fullList">
+      <div id='closeButton' onclick='hideFullList()'>x</div>
 
       <div name = "fcHead" id="fcHead"></div>
       <div class="fcItem" id="fc0"></div>
@@ -40,7 +40,7 @@
       <div class="fcItem" id="fc4"></div>
       <button id="buyButton" onclick="buyList(fcHead.innerText)">BUY</button>
     </div>
-      <button onclick=spawnCard()>Spawn Card</button>
+      <button onclick=spawnList()>Spawn List</button>
       <div>
         <p>
           <span>
@@ -84,7 +84,7 @@
         </p>
       </div>
       <div id="panel">
-        <div id='closeButton' onclick='hideFullCard()'>x</div>
+        <div id='closeButton' onclick='hideFullList()'>x</div>
         <script>// Panels
         var flash1="<div id='closeButton' onclick='hidePanel()'>x</div>"
         +"<p style='font-size:40px'>Welcome to HΞX</p>"
