@@ -8,13 +8,21 @@ html, body {
 p {
   margin: 10px
 }
-#listSpace {
+.listSpace {
   background: none;
   border: blue solid;
   left: 0px;
   right: 0px;
   position: absolute;
-  top: 100px;
+  top: 10px;
+}
+#homeSpace {
+  top: 50px;
+  border: red solid;
+}
+#awaySpace {
+  top: 50px;
+  border: green solid;
 }
 .list {
   font-size: 12px;

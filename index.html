@@ -16,70 +16,66 @@
   </head>
   <body>
     <div class="flex-container" >
-    <table>
-      <tr>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-      </tr>
-    </table>
-    <canvas class="background"></canvas>
-    <div id="listSpace" name="listSpace"></div>
+      <table>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <canvas class="background"></canvas>
+      <div id="listSpace" class="listySpace" name="listSpace">
+        <div id="homeSpace" class="listSpace"></div>
+        <div id="awaySpace" class="listSpace"></div>
+      </div>
+      <div id="fullList">
+        <div id='closeButton' onclick='hideFullList()'>x</div>
 
-    <div id="fullList">
-      <div id='closeButton' onclick='hideFullList()'>x</div>
-
-      <div name = "fcHead" id="fcHead"></div>
-      <div class="fcItem" id="fc0"></div>
-      <div class="fcItem" id="fc1"></div>
-      <div class="fcItem" id="fc2"></div>
-      <div class="fcItem" id="fc3"></div>
-      <div class="fcItem" id="fc4"></div>
-      <button id="buyButton" onclick="buyList(fcHead.innerText)">BUY</button>
-    </div>
-      <button onclick=spawnList()>Spawn List</button>
-      <div>
+        <div name = "fcHead" id="fcHead"></div>
+        <div class="fcItem" id="fc0"></div>
+        <div class="fcItem" id="fc1"></div>
+        <div class="fcItem" id="fc2"></div>
+        <div class="fcItem" id="fc3"></div>
+        <div class="fcItem" id="fc4"></div>
+        <button id="buyButton" onclick="buyList(fcHead.innerText)">BUY</button>
+      </div>
+      <!--<button onclick=spawnList()>Spawn List</button>-->
+      <div id="infoTable">
         <p>
-          <span>
-            <div id="infoTable">
-              <p>
-                <span class="infoLabel">
-                  Player :
-                </span>
-                <span class="infoContent" >
-                  <span id="ma">
-                    Unable to connect to Main Account
-                  </span>
-                </span>
-              </p>
-              <p>
-                <span class="infoLabel">
-                  Balance :
-                </span>
-                <span class="infoContent" >
-                  <span id="ba" ></span> Ξther
-                </span>
-              </p>
-              <p>
-                <span class="infoLabel">
-                  Contract  :
-                </span>
-                <span class="infoContent" >
-                  <span id="ca"></span>
-                </span>
-              </p>
-              <p>
-                <span class="infoLabel">
-                  Balance :
-                </span>
-                <span class="infoContent" >
-                  <span id="cb"></span> Ξther
-                </span>
-              </p>
-            </div>
+          <span class="infoLabel">
+            Player :
+          </span>
+          <span class="infoContent" >
+            <span id="ma">
+              Unable to connect to Main Account
+            </span>
+          </span>
+        </p>
+        <p>
+          <span class="infoLabel">
+            Balance :
+          </span>
+          <span class="infoContent" >
+            <span id="ba" ></span> Ξther
+          </span>
+        </p>
+        <p>
+          <span class="infoLabel">
+            Contract  :
+          </span>
+          <span class="infoContent" >
+            <span id="ca"></span>
+          </span>
+        </p>
+        <p>
+          <span class="infoLabel">
+            Balance :
+          </span>
+          <span class="infoContent" >
+            <span id="cb"></span> Ξther
           </span>
         </p>
       </div>

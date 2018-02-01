@@ -89,6 +89,8 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
 
   {// Get Lists by ID
     listCount = 0;
+    homeCount = 0;
+    awayCount = 0;
     for (i=200;i<300;i++) {
       web3.eth.contract(abiArray).at(targetAddress).getListDetails(i,function(error,details) {
         //console.log(details);
@@ -98,37 +100,59 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
         if (listExists) {
           listID= details[0].c[0];
           headString = listID;
-          //headString="000000"+listID.toString(16);
-          //headString = headString.substring(headString.length-6,headString.length);
+            //headString="000000"+listID.toString(16);
+            //headString = headString.substring(headString.length-6,headString.length);
           listFill = "<div class = 'listHead'>" + headString + "</div>";
           showList = true;
+          listOffset = 00;
+          homeList = false;
           for ( h = 0 ; h<5 ; h++ ) {
             if (details[2][h] == mainAccount) {
-              showList = true;
+              homeList = true;
+              //showList = true;
               listFill = listFill + "<div style='color:red'>" + trunc(details[2][h]) + "</div>";
             }
             else {
+              //homeList = false;
               listFill = listFill + "<div>" + trunc(details[2][h]) + "</div>";
             }
           }
           if(showList){
-          var newList = document.createElement("div");
-          newList.setAttribute("id", "list"+listCount);
-          newList.setAttribute("class", "list");
-          newList.setAttribute("onclick", "drawList("+details[0].c[0]+")");
-          var node = document.createTextNode("");
-          newList.appendChild(node);
-          var element = document.getElementById("listSpace");
-          element.appendChild(newList);
-          document.getElementById("list"+listCount).innerHTML = listFill;
-          colCount = Math.floor(window.innerWidth/80);
-          row = Math.floor(listCount/colCount);
-          col = (listCount - row*colCount);
-          document.getElementById("list"+listCount).style.top = row*115+"px";
-          document.getElementById("list"+listCount).style.left = col*80+"px";
-          listCount++;
-          //console.log(details[0].c[0],details);
-        }
+
+            var newList = document.createElement("div");
+            newList.setAttribute("id", "list"+listCount);
+            newList.setAttribute("class", "list");
+            newList.setAttribute("onclick", "drawList("+details[0].c[0]+")");
+            var node = document.createTextNode("");
+            newList.appendChild(node);
+            if (homeList){
+              var element = document.getElementById("homeSpace");
+            } else {
+              var element = document.getElementById("awaySpace");
+            }
+            //var element = document.getElementById("homeSpace");
+            element.appendChild(newList);
+            document.getElementById("list"+listCount).innerHTML = listFill;
+            colCount = Math.floor(window.innerWidth/80)-1;
+
+            if (homeList) {
+              //listOffset = 0;
+              row = Math.floor(homeCount/colCount);
+              col = (homeCount - row*colCount);
+              homeCount++
+              document.getElementById("awaySpace").style.top = 200+row*100+"px";
+            } else {
+              //listOffset = 0;
+              row = Math.floor(awayCount/colCount);
+              col = (awayCount - row*colCount);
+              awayCount++
+            };
+
+            document.getElementById("list"+listCount).style.top = row*100+"px";
+            document.getElementById("list"+listCount).style.left = col*80+"px";
+            listCount++;
+            //console.log(details[0].c[0],details);
+          }
         }
       })
     }
@@ -168,8 +192,10 @@ function drawList (listToBeDrawn) {
 }
 function buyList(ID) {
   console.log(ID);
-  transactionData = "0x9ecf86c800000000000000000000000000000000000000000000000000000000000000"+Number(ID).toString(16);
-  console.log(transactionData);
+  hexID = "000000"+Number(ID).toString(16);
+  paddedNumber = hexID.substring(hexID.length-6,hexID.length);
+  transactionData = "0x9ecf86c80000000000000000000000000000000000000000000000000000000000"+paddedNumber;
+  console.log(paddedNumber);
   submitTransaction(targetAddress,100000000000000000,transactionData)
   }
 
