@@ -71,15 +71,16 @@ function init() { // FUNCTION IS EXECUTED ON PAGE LOAD
     var MyContract = web3.eth.contract(abiArray);
     var myContractInstance = MyContract.at(targetAddress);
   }//////////////////////////////////////////////////////////////////////
-  {// watch for an event with {some: 'args'}
+  { // watch for an event with {some: 'args'}
     //var events = myContractInstance.allEvents({fromBlock: 0});
     var events = myContractInstance.allEvents( {fromBlock: 	1660632});
     //var events = myContractInstance.allEvents({});
-    events.watch(function(error, result){
-      if(result.args._receiver==mainAccount){console.log(result.args);}
-
+    events.watch( function(error, result) {
+      if(result.args._receiver==mainAccount) {
+        console.log(result.args);
+      }
     });
-  }/////////////////////////////////////////////////////////////////
+  } /////////////////////////////////////////////////////////////////
   {// get Highest List Number (numLists)
     web3.eth.contract(abiArray).at(targetAddress).creator(function(error,creatorAddress) {
       console.log(creatorAddress);
